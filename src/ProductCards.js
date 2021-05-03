@@ -1,22 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TinderCard from 'react-tinder-card'
 import './ProductCards.css'
+import axios from './axios'
 
 function ProductCards() {
-    const [people, setPeople] = useState([
-        {
-            name: "Nature",
-            url: "https://images.unsplash.com/photo-1532344110095-8c22cdcfc71c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=376&q=80",
-        },
-        {
-            name: "Ocean",
-            url: "https://images.unsplash.com/photo-1606744666360-2f22c8b4a45b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1400&q=80",
-        },
-        {
-            name: "Sky",
-            url: "https://images.unsplash.com/photo-1509647648544-a3e09b751ad6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=348&q=80",
-        },
-    ])
+    const [people, setPeople] = useState([])
+
+    useEffect(() => {
+        async function fetchData() {
+            const req = await axios.get('/categories/products')
+
+            setPeople(req.data)
+            
+        }
+    
+        fetchData()
+    },[])
+
+    console.log(people)
 
     const swiped = (direction, nameToDelete) => {
         console.log('removing' + nameToDelete)
@@ -37,7 +38,7 @@ function ProductCards() {
                             onCardLeftScreen={() => outOfFrame(person.name)}
                         >
                             <div
-                                style={{ backgroundImage: `url(${person.url})`}}
+                                style={{ backgroundImage: `url(${person.imgUrl})`}}
                                 className="card"
                             >
                                 <h3>{person.name}</h3></div>
